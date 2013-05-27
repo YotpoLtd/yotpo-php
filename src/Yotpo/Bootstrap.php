@@ -21,7 +21,6 @@ class Bootstrap {
     public static function init()
     {
         spl_autoload_register(array('\Yotpo\Bootstrap', 'autoload'));
-        self::registerHandlers();
     }
     
     /**
@@ -67,5 +66,3 @@ class Bootstrap {
         }
     }
 }
-
-?>

@@ -1,5 +1,4 @@
 <?php
-
-require(__DIR__ . '/src/Yotpo/Bootstrap.php');
+require 'vendor/autoload.php';
 \Yotpo\Bootstrap::init();
 
