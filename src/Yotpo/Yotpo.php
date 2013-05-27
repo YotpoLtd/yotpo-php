@@ -90,11 +90,7 @@ class Yotpo {
             'grant_type' => 'client_credentials'
         );
 
-        if (array_key_exists('client_id', $credentials_hash)) {
-            $request['client_id'] = $credentials_hash['client_id'];
-        } else {
-            $request['client_id'] = self::$app_key;
-        }
+        $request['client_id'] = $this->get_app_key($credentials_hash);
 
         if (array_key_exists('secret', $credentials_hash)) {
             $request['client_secret'] = $credentials_hash['secret'];
@@ -109,19 +105,14 @@ class Yotpo {
         $account_platform = self::build_request(array('shop_token' => 'shop_token', 'shop_domain' => 'shop_domain', 'plan_name' => 'plan_name', 'platform_type_id' => 'platform_type_id'), $account_platform_hash);
         $account_platform['deleted'] = false;
         $request = array('utoken' => $account_platform_hash['utoken'], 'account_platform' => $account_platform);
-        $app_key = $account_platform_hash['app_key'];
-        $this->post("/apps/$app_key/account_platform", request);
+        $app_key = $this->get_app_key($account_platform_hash);
+        $this->post("/apps/$app_key/account_platform", $request);
     }
 
     public function get_login_url(array $credentials_hash = null) {
         $request = array();
-
-        if (array_key_exists('app_key', $credentials_hash)) {
-            $request['app_key'] = $credentials_hash['app_key'];
-        } else {
-            $request['app_key'] = self::$app_key;
-        }
-
+        $request['app_key'] = $app_key = $this->get_app_key($credentials_hash);
+        
         if (array_key_exists('secret', $credentials_hash)) {
             $request['secret'] = $credentials_hash['secret'];
         } else {
@@ -132,7 +123,7 @@ class Yotpo {
     }
 
     public function check_subdomain(array $subdomain_hash) {
-        $app_key = $subdomain_hash['app_key'];
+        $app_key = $this->get_app_key($subdomain_hash);
         $subdomain = $subdomain_hash['subdomain'];
         $utoken = $subdomain_hash['utoken'];
         $this->get("/apps/$app_key/subomain_check/$subdomain?utoken=$utoken");
@@ -151,7 +142,7 @@ class Yotpo {
             'utoken' => $account_hash['utoken']
         );
 
-        $app_key = $account_hash['app_key'];
+        $app_key = $this->get_app_key($account_hash);
         $this->put("/apps/$app_key", $request);
     }
 
@@ -167,13 +158,13 @@ class Yotpo {
                     'platform' => 'platform',
                     'products' => 'products'
                         ), $purchase_hash);
-        $app_key = $purchase_hash['app_key'];
+        $app_key = $this->get_app_key($purchase_hash);
         return $this->post("/apps/$app_key/purchases", $request);
     }
 
     public function create_purchases(array $purchases_hash) {
         $request = self::build_request(array('utoken' => 'utoken', 'platform' => 'platform', 'orders' => 'orders'), $purchases_hash);
-        $app_key = $purchases_hash['app_key'];
+        $app_key = $this->get_app_key($purchases_hash);
         return $this->post("/apps/$app_key/purchases/mass_create", $request);
     }
 
@@ -185,19 +176,19 @@ class Yotpo {
         if (!array_key_exists('count', $request)) {
             $request['count'] = 10;
         }
-        $app_key = $request_hash['app_key'];
+        $app_key = $this->get_app_key($request_hash);
         return $this->get("/apps/$app_key/purchases", $request);
     }
 
     public function send_test_reminder(array $reminder_hash) {
         $request = self::build_request(array('utoken' => 'utoken', 'email' => 'email'), $reminder_hash);
-        $app_key = $reminder_hash['app_key'];
+        $app_key = $this->get_app_key($reminder_hash);
         return $this->post("/apps/$app_key/reminders/send_test_email", $request);
     }
 
     public function get_all_bottom_lines(array $request_hash) {
         $request = self::build_request(array('utoken' => 'utoken', 'since_date' => 'since_date', 'since_id' => 'since_id'), $request_hash);
-        $app_key = $request_hash['app_key'];
+        $app_key = $this->get_app_key($request_hash);
         return $this->get("/apps/$app_key/bottom_lines", $request);
     }
 
@@ -223,13 +214,7 @@ class Yotpo {
     }
 
     public function get_product_reviews(array $request_hash) {
-        $app_key = self::$app_key;
-
-        if ($request_hash['app_key']) {
-            $app_key = $request_hash['app_key'];
-        } else if (!$app_key) {
-            throw 'app_key is mandatory for this request';
-        }
+        $app_key = $this->get_app_key($request_hash);
 
         $product_id = $request_hash['product_id'];
 
@@ -247,20 +232,23 @@ class Yotpo {
     }
 
     public function get_product_bottom_line(array $request_hash) {
-        $app_key = self::$app_key;
-
-        if ($request_hash['app_key']) {
-            $app_key = $request_hash['app_key'];
-        } else if (!$app_key) {
-            throw 'app_key is mandatory for this request';
-        }
-
+        $app_key = $this->get_app_key($request_hash);
         $product_id = $request_hash['product_id'];
 
         if (!$product_id) {
             throw 'product_id is mandatory for this request';
         }
         return $this->get("/products/$app_key/$product_id/bottomline");
+    }
+    
+    protected function get_app_key($hash){
+        if(array_key_exists('app_key', $hash)){
+            return $hash['app_key'];
+        } elseif (self::$app_key != null) {
+            return self::$app_key; 
+        }else {
+            throw 'app_key is mandatory for this request';
+        }
     }
 
     protected static function build_request(array $params, array $request_params) {
