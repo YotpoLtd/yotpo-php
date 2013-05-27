@@ -148,6 +148,9 @@ class Yotpo {
     }
 
     public function send_test_reminder(array $reminder_hash) {
+      $request = self::build_request(array('utoken', 'email'), $reminder_hash);
+      $app_key = $reminder_hash['app_key'];
+      $this->post("/apps/$app_key/reminders/send_test_email", $request);
         
     }
 
