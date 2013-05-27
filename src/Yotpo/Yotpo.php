@@ -63,9 +63,9 @@ class Yotpo {
     }
 
     protected static function process_response(Response $response) {
-        if($response->hasBody()){
+        if ($response->hasBody()) {
             return $response->body;
-        }else{
+        } else {
             throw 'Invalid Response';
         }
     }
@@ -106,7 +106,11 @@ class Yotpo {
     }
 
     public function create_account_platform(array $account_platform_hash) {
-        
+        $account_platform = self::build_request(array('shop_token' => 'shop_token', 'shop_domain' => 'shop_domain', 'plan_name' => 'plan_name', 'platform_type_id' => 'platform_type_id'), $account_platform_hash);
+        $account_platform['deleted'] = false;
+        $request = array('utoken' => $account_platform_hash['utoken'], 'account_platform' => $account_platform);
+        $app_key = $account_platform_hash['app_key'];
+        $this->post("/apps/$app_key/account_platform", request);
     }
 
     public function get_login_url(array $credentials_hash = null) {
@@ -128,34 +132,73 @@ class Yotpo {
     }
 
     public function check_subdomain(array $subdomain_hash) {
-        
+        $app_key = $subdomain_hash['app_key'];
+        $subdomain = $subdomain_hash['subdomain'];
+        $utoken = $subdomain_hash['utoken'];
+        $this->get("/apps/$app_key/subomain_check/$subdomain?utoken=$utoken");
     }
 
     public function update_account(array $account_hash) {
-        
+        $request = array(
+            'account' => self::build_request(
+                    array(
+                'minisite_website_name' => 'minisite_website_name',
+                'minisite_website' => 'minisite_website',
+                'minisite_subdomain' => 'minisite_subdomain',
+                'minisite_cname' => 'minisite_cname',
+                'minisite_subdomain_active' => 'minisite_subdomain_active'
+                    ), $account_hash),
+            'utoken' => $account_hash['utoken']
+        );
+
+        $app_key = $account_hash['app_key'];
+        $this->put("/apps/$app_key", $request);
     }
 
     public function create_purchase(array $purchase_hash) {
-        
+        $request = self::build_request(
+                        array(
+                    'utoken' => 'utoken',
+                    'email' => 'email',
+                    'customer_name' => 'customer_name',
+                    'order_date' => 'order_date',
+                    'currency_iso' => 'currency_iso',
+                    'order_id' => 'order_id',
+                    'platform' => 'platform',
+                    'products' => 'products'
+                        ), $purchase_hash);
+        $app_key = $purchase_hash['app_key'];
+        return $this->post("/apps/$app_key/purchases", $request);
     }
 
     public function create_purchases(array $purchases_hash) {
-        
+        $request = self::build_request(array('utoken' => 'utoken', 'platform' => 'platform', 'orders' => 'orders'), $purchases_hash);
+        $app_key = $purchases_hash['app_key'];
+        return $this->post("/apps/$app_key/purchases/mass_create", $request);
     }
 
     public function get_purchases(array $request_hash) {
-        
+        $request = self::build_request(array('utoken' => 'utoken', 'since_id' => 'since_id', 'since_date' => 'since_date', 'page' => 'page', 'count' => 'count'), $request_hash);
+        if (!array_key_exists('page', $request)) {
+            $request['page'] = 1;
+        }
+        if (!array_key_exists('count', $request)) {
+            $request['count'] = 10;
+        }
+        $app_key = $request_hash['app_key'];
+        return $this->get("/apps/$app_key/purchases", $request);
     }
 
     public function send_test_reminder(array $reminder_hash) {
-      $request = self::build_request(array('utoken', 'email'), $reminder_hash);
-      $app_key = $reminder_hash['app_key'];
-      $this->post("/apps/$app_key/reminders/send_test_email", $request);
-        
+        $request = self::build_request(array('utoken' => 'utoken', 'email' => 'email'), $reminder_hash);
+        $app_key = $reminder_hash['app_key'];
+        return $this->post("/apps/$app_key/reminders/send_test_email", $request);
     }
 
     public function get_all_bottom_lines(array $request_hash) {
-        
+        $request = self::build_request(array('utoken' => 'utoken', 'since_date' => 'since_date', 'since_id' => 'since_id'), $request_hash);
+        $app_key = $request_hash['app_key'];
+        return $this->get("/apps/$app_key/bottom_lines", $request);
     }
 
     public function create_review(array $review_hash) {
