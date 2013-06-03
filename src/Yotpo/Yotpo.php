@@ -15,7 +15,7 @@ use Httpful\Response;
  */
 class Yotpo {
 
-    const VERSION = '0.0.2';
+    const VERSION = '0.0.3';
 
     protected static $app_key, $secret, $base_uri = 'https://api.yotpo.com';
 
@@ -258,6 +258,7 @@ class Yotpo {
                 $request[$value] = $request_params[$key];
             }
         }
+        return $request;
     }
 
 }
