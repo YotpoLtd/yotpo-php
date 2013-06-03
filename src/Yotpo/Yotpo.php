@@ -43,23 +43,29 @@ class Yotpo {
     }
 
     protected function get($uri, array $params = null) {
-        $params = array_filter($params, 'strlen');
-        return self::process_response(Request::get(self::$base_uri . $uri .'?'. http_build_query($params))->send());
+        if(!is_null($params)){
+            $params = self::clean_array($params);
+            return self::process_response(Request::get(self::$base_uri . $uri .'?'. http_build_query($params))->send());
+        }
+        return self::process_response(Request::get(self::$base_uri . $uri)->send());
     }
 
     protected function post($uri, array $params = null) {
-        $params = array_filter($params, 'strlen');
-        return self::process_response(Request::get(self::$base_uri . $uri)->body($params)->send());
-    }
-
-    protected function put($uri, array $params = null) {
-        $params = array_filter($params, 'strlen');
+        $params = self::clean_array($params);
         return self::process_response(Request::post(self::$base_uri . $uri)->body($params)->send());
     }
 
+    protected function put($uri, array $params = null) {
+        $params = self::clean_array($params);
+        return self::process_response(Request::put(self::$base_uri . $uri)->body($params)->send());
+    }
+
     protected function delete($uri, array $params = null) {
-        $params = array_filter($params, 'strlen');
-        return self::process_response(Request::delete(self::$base_uri . $uri .'?'. http_build_query($params))->send());
+        if(!is_null($params)){
+            $params = self::clean_array($params);
+            return self::process_response(Request::delete(self::$base_uri . $uri .'?'. http_build_query($params))->send());
+        }
+        return self::process_response(Request::delete(self::$base_uri . $uri)->send());
     }
 
     protected static function process_response(Response $response) {
@@ -106,14 +112,13 @@ class Yotpo {
         $account_platform['deleted'] = false;
         $request = array('utoken' => $account_platform_hash['utoken'], 'account_platform' => $account_platform);
         $app_key = $this->get_app_key($account_platform_hash);
-        $this->post("/apps/$app_key/account_platform", $request);
+        return $this->post("/apps/$app_key/account_platform", $request);
     }
 
     public function get_login_url(array $credentials_hash = null) {
         $request = array();
         $request['app_key'] = $app_key = $this->get_app_key($credentials_hash);
-        
-        if (array_key_exists('secret', $credentials_hash)) {
+        if (!is_null($credentials_hash) && array_key_exists('secret', $credentials_hash)) {
             $request['secret'] = $credentials_hash['secret'];
         } else {
             $request['secret'] = self::$secret;
@@ -125,8 +130,11 @@ class Yotpo {
     public function check_subdomain(array $subdomain_hash) {
         $app_key = $this->get_app_key($subdomain_hash);
         $subdomain = $subdomain_hash['subdomain'];
+        if(is_null($subdomain)){
+            throw 'subdomain Can not be blank';
+        }
         $utoken = $subdomain_hash['utoken'];
-        $this->get("/apps/$app_key/subomain_check/$subdomain?utoken=$utoken");
+        return $this->get("/apps/$app_key/subomain_check/$subdomain?utoken=$utoken");
     }
 
     public function update_account(array $account_hash) {
@@ -143,7 +151,7 @@ class Yotpo {
         );
 
         $app_key = $this->get_app_key($account_hash);
-        $this->put("/apps/$app_key", $request);
+        return $this->put("/apps/$app_key", $request);
     }
 
     public function create_purchase(array $purchase_hash) {
@@ -210,7 +218,7 @@ class Yotpo {
         );
         $request = self::build_request($params, $review_hash);
 
-        $this->get('/reviews/dynamic_create', $request);
+        return $this->get('/reviews/dynamic_create', $request);
     }
 
     public function get_product_reviews(array $request_hash) {
@@ -242,7 +250,7 @@ class Yotpo {
     }
     
     protected function get_app_key($hash){
-        if(array_key_exists('app_key', $hash)){
+        if(!is_null($hash) && !empty($hash) && array_key_exists('app_key', $hash)){
             return $hash['app_key'];
         } elseif (self::$app_key != null) {
             return self::$app_key; 
@@ -259,6 +267,21 @@ class Yotpo {
             }
         }
         return $request;
+    }
+    
+    protected static function clean_array(array $array){
+        
+        foreach( $array as $key => $value ) {
+            if( is_array( $value ) ) {
+                foreach( $value as $key2 => $value2 ) {
+                    if( empty( $value2 ) ) 
+                        unset( $array[ $key ][ $key2 ] );
+                }
+            }
+            if( empty( $array[ $key ] ) )
+                unset( $array[ $key ] );
+        }
+        return $array;
     }
 
 }
