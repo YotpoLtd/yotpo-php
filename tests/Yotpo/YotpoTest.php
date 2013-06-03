@@ -16,7 +16,11 @@ class YotpoTest extends \PHPUnit_Framework_TestCase {
 
     private $utoken = null;
 
-    function testInit() {
+    public function setUp(){
+        
+    }
+    
+    public function testInit() {
         $yotpo = new \Yotpo\Yotpo(self::TEST_APP_KEY, self::TEST_SECRET);
         $this->assertEquals('Yotpo\Yotpo', get_class($yotpo));
     }
