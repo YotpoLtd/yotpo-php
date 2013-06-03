@@ -44,7 +44,7 @@ class Yotpo {
 
     protected function get($uri, array $params = null) {
         $params = array_filter($params, 'strlen');
-        return self::process_response(Request::get(self::$base_uri . $uri . http_build_query($params))->send());
+        return self::process_response(Request::get(self::$base_uri . $uri .'?'. http_build_query($params))->send());
     }
 
     protected function post($uri, array $params = null) {
@@ -59,7 +59,7 @@ class Yotpo {
 
     protected function delete($uri, array $params = null) {
         $params = array_filter($params, 'strlen');
-        return self::process_response(Request::delete(self::$base_uri . $uri . http_build_query($params))->send());
+        return self::process_response(Request::delete(self::$base_uri . $uri .'?'. http_build_query($params))->send());
     }
 
     protected static function process_response(Response $response) {
