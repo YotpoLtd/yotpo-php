@@ -2,8 +2,6 @@
 
 namespace Yotpo;
 
-require(dirname(dirname(dirname(__FILE__))) . '/bootstrap.php');
-
 use Httpful\Request;
 use Httpful\Mime;
 use Httpful\Response;

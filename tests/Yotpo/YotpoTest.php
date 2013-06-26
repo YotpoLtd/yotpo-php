@@ -11,8 +11,8 @@ require(dirname(dirname(dirname(__FILE__))) . '/bootstrap.php');
 
 class YotpoTest extends \PHPUnit_Framework_TestCase {
 
-    const TEST_APP_KEY = 'nNgGNA54ETOqaXQ7hRZymxqdtwwetJKDVs0v8qGG';
-    const TEST_SECRET = 'YUFV3FrFHGbAJLPsOR8JebwUUhGJg9Z42XKj3Umm';
+    const TEST_APP_KEY = 'c2cThXB8foo9O63Xj4hx2L4SJFiioCJPsIOP83dr';
+    const TEST_SECRET = 'DgGS4b7dBEAUbx5hYE29S0TKIpypDGpShVMjYFlz';
 
     private $utoken = null;
     private $yotpo = null;

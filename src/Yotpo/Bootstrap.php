@@ -39,7 +39,6 @@ class Bootstrap {
     public static function pharInit()
     {
         spl_autoload_register(array('\Yotpo\Bootstrap', 'pharAutoload'));
-        self::registerHandlers();
     }
 
     /**
