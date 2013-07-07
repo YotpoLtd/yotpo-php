@@ -18,13 +18,9 @@ class Yotpo {
     protected static $app_key, $secret, $base_uri = 'https://api.yotpo.com';
 
     public function __construct($app_key = null, $secret = null, $base_uri = null) {
-        if ($app_key != null) {
-            self::$app_key = $app_key;
-        }
-
-        if ($secret != null) {
-            self::$secret = $secret;
-        }
+        $this->set_app_key($app_key);
+       
+        $this->set_secret($secret); 
 
         if ($base_uri != null) {
             self::$base_uri = $base_uri;
@@ -86,7 +82,7 @@ class Yotpo {
             'callback_url' => $user_hash['callback_url'],
             'url' => $user_hash['url']
         );
-        return $this->post('/users', array(user => $user));
+        return $this->post('/users', array('user' => $user));
     }
 
     public function get_oauth_token(array $credentials_hash = array()) {
@@ -247,6 +243,18 @@ class Yotpo {
         return $this->get("/products/$app_key/$product_id/bottomline");
     }
     
+    public function set_app_key($app_key) {
+        if ($app_key != null) {
+            self::$app_key = $app_key;
+        }
+    }
+     
+    public function set_secret($secret) {
+        if ($secret != null) {
+            self::$secret = $secret;
+        }
+    }
+
     protected function get_app_key($hash){
         if(!is_null($hash) && !empty($hash) && array_key_exists('app_key', $hash)){
             return $hash['app_key'];

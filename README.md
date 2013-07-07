@@ -3,6 +3,11 @@ yotpo-php
 
 A PHP interface to the YOTPO API
 
+
+## Requirements
+
+* YOTPO API requires PHP 5.3.0 (or later).
+
 ## Installation
 
 Add this line to your application's Gemfile:

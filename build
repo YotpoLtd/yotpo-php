@@ -19,7 +19,7 @@ function exit_unless($condition, $msg = null) {
 echo "Building Yotpo Phar... ";
 $base_dir = dirname(__FILE__);
 $source_dir = $base_dir . '/src/Yotpo';
-$phar_path = $base_dir . '/downloads/yotpo.phar';
+$phar_path = $base_dir . '/yotpo.phar';
 echo $phar_path;
 $phar = new Phar($phar_path, 0, 'yotpo.phar');
 $stub = <<<HEREDOC
