@@ -66,7 +66,7 @@ class Yotpo {
         if ($response->hasBody()) {
             return $response->body;
         } else {
-            throw 'Invalid Response';
+            throw new \Exception('Invalid Response');
         }
     }
 
@@ -125,7 +125,7 @@ class Yotpo {
         $app_key = $this->get_app_key($subdomain_hash);
         $subdomain = $subdomain_hash['subdomain'];
         if(is_null($subdomain)){
-            throw 'subdomain Can not be blank';
+            throw new \Exception('subdomain Can not be blank');
         }
         $utoken = $subdomain_hash['utoken'];
         return $this->get("/apps/$app_key/subomain_check/$subdomain?utoken=$utoken");
@@ -221,13 +221,13 @@ class Yotpo {
         $product_id = $request_hash['product_id'];
 
         if (!$product_id) {
-            throw 'product_id is mandatory for this request';
+            throw new Exception('product_id is mandatory for this request');
         }
 
         $request_params = array(
-            'page' => $request_hash['page'],
-            'count' => $request_hash['count'],
-            'since_date' => $request_hash['since_date']
+            'page' => isset($request_hash['page']) ? $request_hash['page'] : null,
+            'count' => isset($request_hash['count']) ? $request_hash['count'] : null,
+            'since_date' => isset($request_hash['since_date']) ? $request_hash['since_date'] : null
         );
 
         return $this->get("/products/$app_key/$product_id/reviews", $request_params);
@@ -238,7 +238,7 @@ class Yotpo {
         $product_id = $request_hash['product_id'];
 
         if (!$product_id) {
-            throw 'product_id is mandatory for this request';
+            throw new \Exception('product_id is mandatory for this request');
         }
         return $this->get("/products/$app_key/$product_id/bottomline");
     }
@@ -261,7 +261,7 @@ class Yotpo {
         } elseif (self::$app_key != null) {
             return self::$app_key; 
         }else {
-            throw 'app_key is mandatory for this request';
+            throw new \Exception('app_key is mandatory for this request');
         }
     }
 
@@ -292,4 +292,3 @@ class Yotpo {
 
 }
 
-?>
