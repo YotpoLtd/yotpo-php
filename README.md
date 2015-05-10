@@ -10,9 +10,14 @@ A PHP interface to the YOTPO API
 
 ## Installation
 
-Add this line to your application's Gemfile:
+First clone the repository:
 
     git clone git@github.com:YotpoLtd/yotpo-php.git
+
+Then download and install the composer dependencies:
+
+    php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer'));"
+    php composer.phar install
 
 ## Usage
 
