@@ -6,7 +6,6 @@
 
 namespace Yotpo\Test;
 
-require(dirname(dirname(dirname(__FILE__))) . '/bootstrap.php');
 \Yotpo\Bootstrap::init();
 
 class YotpoTest extends \PHPUnit_Framework_TestCase {
@@ -20,7 +19,7 @@ class YotpoTest extends \PHPUnit_Framework_TestCase {
         $this->yotpo = new \Yotpo\Yotpo(self::TEST_APP_KEY, self::TEST_SECRET);
         $this->utoken = $this->yotpo->get_oauth_token()->access_token;
     }
-    
+
     public function testInit() {
         $this->assertEquals('Yotpo\Yotpo', get_class($this->yotpo));
     }
@@ -165,7 +164,4 @@ class YotpoTest extends \PHPUnit_Framework_TestCase {
     public function test_build_request() {
         $this->fail('Not Yet Implemented Test');
     }
-
 }
-
-?>
