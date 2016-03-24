@@ -6,7 +6,7 @@
 
 namespace Yotpo\Test;
 
-\Yotpo\Bootstrap::init();
+use Yotpo\Yotpo;
 
 class YotpoTest extends \PHPUnit_Framework_TestCase {
 
@@ -20,7 +20,7 @@ class YotpoTest extends \PHPUnit_Framework_TestCase {
         $this->utoken = $this->yotpo->get_oauth_token()->access_token;
     }
 
-    public function testInit() {
+    public function testConstructor() {
         $this->assertEquals('Yotpo\Yotpo', get_class($this->yotpo));
     }
 
