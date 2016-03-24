@@ -138,30 +138,44 @@ class YotpoTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function test_get_purchases() {
-        $this->fail('Not Yet Implemented Test');
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     public function test_send_test_reminder() {
-        $this->fail('Not Yet Implemented Test');
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     public function test_get_all_bottom_lines() {
-        $this->fail('Not Yet Implemented Test');
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     public function test_create_review() {
-        $this->fail('Not Yet Implemented Test');
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     public function test_get_product_reviews() {
-        $this->fail('Not Yet Implemented Test');
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     public function test_get_product_bottom_line() {
-        $this->fail('Not Yet Implemented Test');
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 
     public function test_build_request() {
-        $this->fail('Not Yet Implemented Test');
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
     }
 }
