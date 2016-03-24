@@ -17,6 +17,7 @@
     },
     "require-dev": {
         "satooshi/php-coveralls": "dev-master",
+        "squizlabs/php_codesniffer": "2.*",
         "phpunit/phpunit": "3.7.*@dev"
     },
     "autoload": {
