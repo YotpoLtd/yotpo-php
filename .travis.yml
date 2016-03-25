@@ -19,5 +19,5 @@ before_script:
   - php composer.phar update --no-interaction --dev
 
 script:
-  - mkdir -p build/logs
   - php vendor/bin/phpunit -c tests/phpunit.xml
+  - vendor/bin/phpcs --standard=ruleset.xml --runtime-set ignore_warnings_on_exit 1 src
