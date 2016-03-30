@@ -16,10 +16,15 @@ class YotpoTest extends \PHPUnit_Framework_TestCase
 
     private $utoken = null;
     private $yotpo = null;
+
     public function setUp()
     {
         $this->yotpo = new \Yotpo\Yotpo(self::TEST_APP_KEY, self::TEST_SECRET);
-        $this->utoken = $this->yotpo->get_oauth_token()->access_token;
+        if (isset($this->yotpo->get_oauth_token()->access_token)) {
+            $this->utoken = $this->yotpo->get_oauth_token()->access_token;
+        } else {
+            $this->markTestSkipped('No access token available.');
+        }
     }
 
     public function testConstructor()
