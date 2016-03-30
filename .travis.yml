@@ -1,22 +1,23 @@
 language: php
 php:
-  - 5.5
-  - 5.4
   - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7
+  - hhvm
+  - nightly
 
 matrix:
   allow_failures:
-    - php: 5.5
+    - php: 7
+    - php: hhvm
+    - php: nightly
 
 before_script:
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar update --no-interaction --dev
 
 script:
-  - mkdir -p build/logs
   - php vendor/bin/phpunit -c tests/phpunit.xml
-
-after_script:
-  - php vendor/bin/coveralls
-  # or enable logging
-  #   - php vendor/bin/coveralls -v
+  - vendor/bin/phpcs --standard=ruleset.xml --runtime-set ignore_warnings_on_exit 1 src
