@@ -15,7 +15,7 @@ class Yotpo {
 
     const VERSION = '0.0.3';
 
-    protected static $app_key, $secret, $base_uri = 'https://api.yotpo.com';
+    public static $app_key, $secret, $base_uri = 'https://api.yotpo.com';
 
     public function __construct($app_key = null, $secret = null, $base_uri = null) {
         $this->set_app_key($app_key);
@@ -221,7 +221,7 @@ class Yotpo {
         $product_id = $request_hash['product_id'];
 
         if (!$product_id) {
-            throw new Exception('product_id is mandatory for this request');
+            throw new \Exception('product_id is mandatory for this request');
         }
 
         $request_params = array(

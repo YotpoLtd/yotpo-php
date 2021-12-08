@@ -95,16 +95,16 @@ $products = array(
 
 
 //now we will create a purchase using this the token we have received in the previous step
-$response = $yotpo->create_purchase(array(	'app_key' => $ak, 
-                                        		'utoken' => $utoken, 
-                                        		'email' => "trial@yotpo.com", 
-                                        		'customer_name' => "bob", 
-                                        		'order_id' => "13444", 
-                                        		'platform' => "Shopify", 
-                                        		'order_date' => "2013-05-28", 
-                                        		'products' => $products, 
-                                        		'currency_iso' => "USD"
-                                        		));
+$response = $yotpo->create_purchase(array(  'app_key' => $ak, 
+                                                'utoken' => $utoken, 
+                                                'email' => "trial@yotpo.com", 
+                                                'customer_name' => "bob", 
+                                                'order_id' => "13444", 
+                                                'platform' => "Shopify", 
+                                                'order_date' => "2013-05-28", 
+                                                'products' => $products, 
+                                                'currency_iso' => "USD"
+                                                ));
 
                                         
 ```
