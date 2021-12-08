@@ -1,11 +1,11 @@
 {
-    "name": "yotpo/yotpo",
+    "name": "searchanise/yotpo",
     "type": "library",
     "description": "A PHP interface to the YOTPO API",
     "keywords": ["rest", "yotpo"],
     "homepage": "https://www.yotpo.com",
     "license": "MIT",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "authors": [
         {
             "name": "Vladislav Shub",
